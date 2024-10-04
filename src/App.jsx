@@ -1,25 +1,26 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import { TextField, Checkbox } from "@material-ui/core";
 
 export default function App() {
-  // const { register, handleSubmit } = useForm();
-  // const onSubmit = (data) => console.log(data);
-
-  const { handleSubmit1, control, reset } =
-    useForm <
-    IFormInputs >
-    {
-      defaultValues: {
-        MyCheckbox: false,
-      },
-    };
-  const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data);
-
   const {
     register,
     formState: { errors },
-    handleSubmit2,
   } = useForm();
-  // const onSubmit = (data) => console.log(data);
+  const { handleSubmit, control, reset } = useForm({
+    defaultValues: {
+      checkbox: false,
+    },
+  });
+
+  const onSubmit = (data) => console.log(data);
+
+  // function Input({ control, name }) {
+  //   const {
+  //     field,
+  //     fieldState: { invalid, isTouched, isDirty },
+  //     formState: { touchedFields, dirtyFields },
+  //   } = useController({ name, control, rules: { required: true } });
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input
@@ -37,7 +38,7 @@ export default function App() {
         })}
         aria-invalid={errors.lastName ? "true" : "false"}
       />
-      {errors.lasrName?.type === "required" && (
+      {errors.lastName?.type === "required" && (
         <p role="alert">Last name is required</p>
       )}
       <input
@@ -47,12 +48,35 @@ export default function App() {
       {errors.mail && <p role="alert">{errors.mail.message}</p>}
       <input
         type="number"
-        {...register("age", { min: 18, max: 99, required: "Age is required" })}
+        {...register("age", {
+          min: 18,
+          max: 99,
+          required: "Age is required",
+        })}
         aria-invalid={errors.age ? "true" : "false"}
       />
       {errors.age && <p role="alert">{errors.age.message}</p>}
+      {/* <TextField
+          onChange={field.onChange} // send value to hook form
+          onBlur={field.onBlur} // notify when input is touched/blur
+          value={field.value} // input value
+          name={field.name} // send down the input name
+          inputRef={field.ref} // send input ref, so we can focus on input when error appear
+        /> */}
       <Controller
-        name="MyCheckbox"
+        name="checkbox"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => <Checkbox {...field} />}
+      />
+      <Controller
+        name="checkbox"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => <Checkbox {...field} />}
+      />
+      <Controller
+        name="checkbox"
         control={control}
         rules={{ required: true }}
         render={({ field }) => <Checkbox {...field} />}
@@ -61,3 +85,6 @@ export default function App() {
     </form>
   );
 }
+// }
+
+// import * as React from "react";
